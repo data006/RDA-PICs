@@ -1,0 +1,72 @@
+//Trabajo 6 corrimiento de 4 leds a 100ms y por medio de las letras A S y D poder modificar poder modificar, A 50 S 100 D 250
+#include <16F887.h>  //libreria al pic a usar
+#DEVICE ADC=8 //Los bits que usara el convertidor
+#fuses INTRC,NOPROTECT,NOLVP,NOWDT,NOBROWNOUT
+#use delay(clock=4000000) //velocidad del reloj interno
+#use rs232 (baud=9600, xmit=PIN_C6, rcv=PIN_C7) //Configuramos la comunicacion serial
+#include <stdlib.h> //Convertir de string a int
+#include <stdio.h> 
+
+#BYTE TRISC = 0x87
+#BYTE PORTC = 0x07
+int time = 100;
+void main()
+{
+
+   
+
+   
+   enable_interrupts(int_rda);
+   enable_interrupts(GLOBAL);        //Encendemos las interrupciones
+
+   OUTPUT_LOW(PIN_B5);
+   OUTPUT_LOW(PIN_B4);
+   OUTPUT_LOW(PIN_B3);
+   OUTPUT_LOW(PIN_B2);
+   
+   
+
+   while(true)
+   {
+      OUTPUT_LOW(PIN_B2);
+      OUTPUT_HIGH(PIN_B5);
+      delay_ms(time);
+      
+      OUTPUT_LOW(PIN_B5);
+      OUTPUT_HIGH(PIN_B4);
+      delay_ms(time);
+      
+      OUTPUT_LOW(PIN_B4);
+      OUTPUT_HIGH(PIN_B3);
+      delay_ms(time);
+      
+      OUTPUT_LOW(PIN_B3);
+      OUTPUT_HIGH(PIN_B2);
+      delay_ms(time);
+
+
+   }
+}
+
+
+
+#int_rda
+void interrupcion_serial()
+{
+
+   char letra;
+   letra = getc();
+   if (letra == 'a' )
+   {
+      time = 50;
+   }
+   if (letra == 's' )
+   {
+      time = 100;
+   }
+   if (letra == 'd' )
+   {
+      time = 150;
+   }
+
+}
